@@ -17,13 +17,13 @@ public class ProdutoService {
     }
 
 
-    // private final AnimeRepository animeRepository;
+    // private final ProdutoRepository produtoRepository;
     public List<Produto> listAll(){
         return produtos;
     }
     public Produto findById(long id){
         return produtos.stream()
-                .filter(anime -> anime.getId().equals(id))
+                .filter(produtos -> produtos.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }

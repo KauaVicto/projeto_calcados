@@ -1,11 +1,10 @@
 package loja.calcado.calcados.controller;
 
-import loja.calcado.calcados.domain.Anime;
-import loja.calcado.calcados.service.AnimeService;
+import loja.calcado.calcados.domain.Cliente;
+import loja.calcado.calcados.service.ClienteService;
 import loja.calcado.calcados.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,22 +15,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("animes")
+@RequestMapping("clientes")
 @Log4j2
 @RequiredArgsConstructor
-public class AnimeController {
+public class ClienteController {
     private final DateUtil dateUtil;
-    private final AnimeService animeService;
+    private final ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<List<Anime>> list(){
+    public ResponseEntity<List<Cliente>> list(){
         log.info(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return new ResponseEntity<>(animeService.listAll(), HttpStatus.OK);
+        return ResponseEntity.ok(clienteService.listAll());
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Anime> findById(@PathVariable long id){
-        return ResponseEntity.ok(animeService.findById(id));
+    public ResponseEntity<Cliente> findById(@PathVariable long id){
+        return ResponseEntity.ok(clienteService.findById(id));
     }
-
 }
