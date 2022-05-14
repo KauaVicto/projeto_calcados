@@ -28,13 +28,4 @@ public class ProdutoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }
 
-    public Produto save(Produto produto) {
-        produto.setId(ThreadLocalRandom.current().nextLong(3, 100000));
-        produtos.add(produto);
-        return produto;
-    }
-
-    public void delete(long id) {
-        produtos.remove(findById(id));
-    }
 }

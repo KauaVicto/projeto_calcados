@@ -31,13 +31,4 @@ public class FuncionarioService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }
 
-    public Funcionario save(Funcionario funcionario) {
-        funcionario.setId(ThreadLocalRandom.current().nextLong(3, 100000));
-        funcionarios.add(funcionario);
-        return funcionario;
-    }
-
-    public void delete(long id) {
-        funcionarios.remove(findById(id));
-    }
 }
