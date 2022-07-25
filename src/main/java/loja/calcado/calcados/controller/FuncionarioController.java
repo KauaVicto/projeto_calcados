@@ -1,5 +1,6 @@
 package loja.calcado.calcados.controller;
 
+import loja.calcado.calcados.domain.Cliente;
 import loja.calcado.calcados.domain.Funcionario;
 import loja.calcado.calcados.service.FuncionarioService;
 import loja.calcado.calcados.util.DateUtil;
@@ -29,5 +30,10 @@ public class FuncionarioController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Funcionario> findById(@PathVariable long id){
         return ResponseEntity.ok(funcionarioService.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Funcionario> save(@RequestBody Funcionario funcionario){
+        return new ResponseEntity<>(funcionarioService.save(funcionario), HttpStatus.CREATED);
     }
 }

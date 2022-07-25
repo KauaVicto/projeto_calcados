@@ -34,4 +34,9 @@ public class ClienteService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }
 
+    public Cliente save(Cliente cliente) {
+        cliente.setId(ThreadLocalRandom.current().nextLong(3, 100000));
+        clientes.add(cliente);
+        return cliente;
+    }
 }

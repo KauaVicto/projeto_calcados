@@ -1,5 +1,6 @@
 package loja.calcado.calcados.controller;
 
+import loja.calcado.calcados.domain.Funcionario;
 import loja.calcado.calcados.domain.Produto;
 import loja.calcado.calcados.service.ProdutoService;
 import loja.calcado.calcados.util.DateUtil;
@@ -29,5 +30,10 @@ public class ProdutoController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Produto> findById(@PathVariable long id){
         return ResponseEntity.ok(produtoService.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Produto> save(@RequestBody Produto produto){
+        return new ResponseEntity<>(produtoService.save(produto), HttpStatus.CREATED);
     }
 }

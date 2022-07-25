@@ -1,5 +1,6 @@
 package loja.calcado.calcados.service;
 
+import loja.calcado.calcados.domain.Funcionario;
 import loja.calcado.calcados.domain.Produto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,12 @@ public class ProdutoService {
                 .filter(produtos -> produtos.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
+    }
+
+    public Produto save(Produto produto) {
+        produto.setId(ThreadLocalRandom.current().nextLong(3, 100000));
+        produtos.add(produto);
+        return produto;
     }
 
 }
