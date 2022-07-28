@@ -38,4 +38,8 @@ public class FuncionarioService {
         return funcionario;
     }
 
+    public void delete(long id) {
+        funcionarios.remove(findById(id));
+    }
+
 }

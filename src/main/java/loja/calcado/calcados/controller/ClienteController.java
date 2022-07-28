@@ -35,4 +35,10 @@ public class ClienteController {
     public ResponseEntity<Cliente> save(@RequestBody Cliente cliente){
         return new ResponseEntity<>(clienteService.save(cliente), HttpStatus.CREATED);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id){
+        clienteService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

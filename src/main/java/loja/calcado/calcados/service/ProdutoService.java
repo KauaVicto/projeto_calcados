@@ -35,4 +35,7 @@ public class ProdutoService {
         return produto;
     }
 
+    public void delete(long id) {
+        produtos.remove(findById(id));
+    }
 }
