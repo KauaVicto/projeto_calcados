@@ -1,7 +1,8 @@
 package loja.calcado.calcados.controller;
 
-import loja.calcado.calcados.domain.Funcionario;
 import loja.calcado.calcados.domain.Produto;
+import loja.calcado.calcados.requests.ProdutoPostRequestBody;
+import loja.calcado.calcados.requests.ProdutoPutRequestBody;
 import loja.calcado.calcados.service.ProdutoService;
 import loja.calcado.calcados.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +30,23 @@ public class ProdutoController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Produto> findById(@PathVariable long id){
-        return ResponseEntity.ok(produtoService.findById(id));
+        return ResponseEntity.ok(produtoService.findByIdOrThrowBadRequestException(id));
     }
 
     @PostMapping
-    public ResponseEntity<Produto> save(@RequestBody Produto produto){
-        return new ResponseEntity<>(produtoService.save(produto), HttpStatus.CREATED);
+    public ResponseEntity<Produto> save(@RequestBody ProdutoPostRequestBody produtoPostRequestBody){
+        return new ResponseEntity<>(produtoService.save(produtoPostRequestBody), HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         produtoService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> replace(@RequestBody ProdutoPutRequestBody produtoPutRequestBody){
+        produtoService.replace(produtoPutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

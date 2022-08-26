@@ -1,41 +1,57 @@
 package loja.calcado.calcados.service;
 
-import loja.calcado.calcados.domain.Funcionario;
 import loja.calcado.calcados.domain.Produto;
+import loja.calcado.calcados.requests.ProdutoPostRequestBody;
+import loja.calcado.calcados.requests.ProdutoPutRequestBody;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import loja.calcado.calcados.repository.ProdutoRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
+@RequiredArgsConstructor
 public class ProdutoService {
-    private static List<Produto> produtos;
-    static {
-        produtos = new ArrayList<>(List.of(new Produto(1L, "Tênis de Corrida", "tênis", "Adidas", "masculino", 230.00), new Produto(2L, "Bota", "Bota", "Bota boa", "masculina", 145.50)));
-    }
 
 
-    // private final ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository;
     public List<Produto> listAll(){
-        return produtos;
+        return produtoRepository.findAll();
     }
-    public Produto findById(long id){
-        return produtos.stream()
-                .filter(produtos -> produtos.getId().equals(id))
-                .findFirst()
+    public Produto findByIdOrThrowBadRequestException(long id){
+        return produtoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }
 
-    public Produto save(Produto produto) {
-        produto.setId(ThreadLocalRandom.current().nextLong(3, 100000));
-        produtos.add(produto);
-        return produto;
+    public Produto save(ProdutoPostRequestBody produtoPostRequestBody) {
+        Produto produto = Produto.builder()
+                .name(produtoPostRequestBody.getName())
+                .marca(produtoPostRequestBody.getMarca())
+                .tipo(produtoPostRequestBody.getTipo())
+                .genero(produtoPostRequestBody.getGenero())
+                .preco(produtoPostRequestBody.getPreco())
+                .build();
+        return produtoRepository.save(produto);
     }
 
     public void delete(long id) {
-        produtos.remove(findById(id));
+        produtoRepository.delete(findByIdOrThrowBadRequestException(id));
+    }
+
+
+    public void replace(ProdutoPutRequestBody produtoPutRequestBody) {
+        Produto savedProduto = findByIdOrThrowBadRequestException(produtoPutRequestBody.getId());
+
+        Produto produto = Produto.builder()
+                .id(savedProduto.getId())
+                .name(produtoPutRequestBody.getName())
+                .marca(produtoPutRequestBody.getMarca())
+                .tipo(produtoPutRequestBody.getTipo())
+                .genero(produtoPutRequestBody.getGenero())
+                .preco(produtoPutRequestBody.getPreco())
+                .build();
+        produtoRepository.save(produto);
     }
 }

@@ -1,7 +1,8 @@
 package loja.calcado.calcados.controller;
 
-import loja.calcado.calcados.domain.Cliente;
 import loja.calcado.calcados.domain.Funcionario;
+import loja.calcado.calcados.requests.FuncionarioPostRequestBody;
+import loja.calcado.calcados.requests.FuncionarioPutRequestBody;
 import loja.calcado.calcados.service.FuncionarioService;
 import loja.calcado.calcados.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,17 +30,23 @@ public class FuncionarioController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Funcionario> findById(@PathVariable long id){
-        return ResponseEntity.ok(funcionarioService.findById(id));
+        return ResponseEntity.ok(funcionarioService.findByIdOrThrowBadRequestException(id));
     }
 
     @PostMapping
-    public ResponseEntity<Funcionario> save(@RequestBody Funcionario funcionario){
-        return new ResponseEntity<>(funcionarioService.save(funcionario), HttpStatus.CREATED);
+    public ResponseEntity<Funcionario> save(@RequestBody FuncionarioPostRequestBody funcionarioPostRequestBody){
+        return new ResponseEntity<>(funcionarioService.save(funcionarioPostRequestBody), HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         funcionarioService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> replace(@RequestBody FuncionarioPutRequestBody funcionarioPutRequestBody){
+        funcionarioService.replace(funcionarioPutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

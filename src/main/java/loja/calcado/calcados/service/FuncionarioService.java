@@ -1,45 +1,62 @@
 package loja.calcado.calcados.service;
 
-import loja.calcado.calcados.domain.Cliente;
-import loja.calcado.calcados.domain.Endereco;
 import loja.calcado.calcados.domain.Funcionario;
+import loja.calcado.calcados.repository.FuncionarioRepository;
+import loja.calcado.calcados.requests.FuncionarioPostRequestBody;
+import loja.calcado.calcados.requests.FuncionarioPutRequestBody;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
+@RequiredArgsConstructor
 public class FuncionarioService {
-    private static List<Funcionario> funcionarios;
-    static {
-        Endereco end1 = new Endereco("Baraúnas", "Rua José Alvino Machado", "Brumado", "Bahia", "46100000");
-        Endereco end2 = new Endereco("Esmeraldas", "Rua Orácio", "Brumado", "Bahia", "46100000");
-        funcionarios = new ArrayList<>(List.of(new Funcionario(1L, "João", "(77) 99954-2346", "2003-10-19", "09878967856", "4789234732", end1, "joao@gmail.com", "5469523475"), new Funcionario(2L, "Kauã", "(77) 99983-1299", "2003-05-23", "54548652154", "1545648645", end2, "kaua@gmail.com", "5656452")));
-    }
 
-
-    // private final ProdutoRepository produtoRepository;
+    private final FuncionarioRepository funcionarioRepository;
     public List<Funcionario> listAll(){
-        return funcionarios;
+        return funcionarioRepository.findAll();
     }
-    public Funcionario findById(long id){
-        return funcionarios.stream()
-                .filter(funcionarios -> funcionarios.getId().equals(id))
-                .findFirst()
+    public Funcionario findByIdOrThrowBadRequestException(long id){
+        return funcionarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }
 
-    public Funcionario save(Funcionario funcionario) {
-        funcionario.setId(ThreadLocalRandom.current().nextLong(3, 100000));
-        funcionarios.add(funcionario);
-        return funcionario;
+    public Funcionario save(FuncionarioPostRequestBody funcionarioPostRequestBody) {
+        Funcionario funcionario = Funcionario.builder()
+                .name(funcionarioPostRequestBody.getName())
+                .carteira_trabalho(funcionarioPostRequestBody.getCarteira_trabalho())
+                .email(funcionarioPostRequestBody.getEmail())
+                .endereco(funcionarioPostRequestBody.getEndereco())
+                .rg(funcionarioPostRequestBody.getRg())
+                .cpf(funcionarioPostRequestBody.getCpf())
+                .data_nascimento(funcionarioPostRequestBody.getData_nascimento())
+                .telefone(funcionarioPostRequestBody.getTelefone())
+                .build();
+        return funcionarioRepository.save(funcionario);
     }
 
     public void delete(long id) {
-        funcionarios.remove(findById(id));
+        funcionarioRepository.delete(findByIdOrThrowBadRequestException(id));
     }
 
+    public void replace(FuncionarioPutRequestBody funcionarioPutRequestBody) {
+        Funcionario savedFuncionario = findByIdOrThrowBadRequestException(funcionarioPutRequestBody.getId());
+
+        Funcionario funcionario = Funcionario.builder()
+                .id(savedFuncionario.getId())
+                .name(funcionarioPutRequestBody.getName())
+                .carteira_trabalho(funcionarioPutRequestBody.getCarteira_trabalho())
+                .email(funcionarioPutRequestBody.getEmail())
+                .endereco(funcionarioPutRequestBody.getEndereco())
+                .rg(funcionarioPutRequestBody.getRg())
+                .cpf(funcionarioPutRequestBody.getCpf())
+                .data_nascimento(funcionarioPutRequestBody.getData_nascimento())
+                .telefone(funcionarioPutRequestBody.getTelefone())
+                .build();
+        funcionarioRepository.save(funcionario);
+    }
 }
