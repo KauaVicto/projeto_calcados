@@ -1,7 +1,9 @@
 package loja.calcado.calcados.controller;
 
 import loja.calcado.calcados.domain.Cliente;
-import loja.calcado.calcados.domain.Funcionario;
+import loja.calcado.calcados.requests.ClientePostRequestBody;
+import loja.calcado.calcados.requests.ClientePutRequestBody;
+import loja.calcado.calcados.requests.ProdutoPutRequestBody;
 import loja.calcado.calcados.service.ClienteService;
 import loja.calcado.calcados.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +31,11 @@ public class ClienteController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Cliente> findById(@PathVariable long id){
-        return ResponseEntity.ok(clienteService.findById(id));
+        return ResponseEntity.ok(clienteService.findByIdOrThrowBadRequestException(id));
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> save(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> save(@RequestBody ClientePostRequestBody cliente){
         return new ResponseEntity<>(clienteService.save(cliente), HttpStatus.CREATED);
     }
 
@@ -44,8 +46,8 @@ public class ClienteController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> replace(@RequestBody Cliente cliente){
-        clienteService.replace(cliente);
+    public ResponseEntity<Void> replace(@RequestBody ClientePutRequestBody clientePutRequestBody){
+        clienteService.replace(clientePutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

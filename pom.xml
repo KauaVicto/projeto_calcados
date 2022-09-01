@@ -15,8 +15,16 @@
 	<description>Esse é um programa que gerencia uma loja de calçados.</description>
 	<properties>
 		<java.version>11</java.version>
+		<org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.mapstrcut</groupId>
+			<artifactId>mapstrcut</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
