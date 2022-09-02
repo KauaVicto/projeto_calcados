@@ -20,8 +20,8 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.mapstrcut</groupId>
-			<artifactId>mapstrcut</artifactId>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
 		</dependency>
 

@@ -17,8 +17,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
-
-
     private final ClienteRepository clienteRepository;
     public List<Cliente> listAll(){
         return clienteRepository.findAll();

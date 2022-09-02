@@ -1,6 +1,5 @@
 package loja.calcado.calcados.requests;
 
-import loja.calcado.calcados.domain.Endereco;
 import lombok.Data;
 
 @Data
