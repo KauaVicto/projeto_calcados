@@ -25,13 +25,14 @@ public class ProdutoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto not Found"));
     }
 
-    public Produto save(ProdutoPostRequestBody produtoPostRequestBody) {
+    public Produto save(String nome, String tipo, String genero, String marca, double preco, String img) {
         Produto produto = Produto.builder()
-                .name(produtoPostRequestBody.getName())
-                .marca(produtoPostRequestBody.getMarca())
-                .tipo(produtoPostRequestBody.getTipo())
-                .genero(produtoPostRequestBody.getGenero())
-                .preco(produtoPostRequestBody.getPreco())
+                .name(nome)
+                .marca(marca)
+                .tipo(tipo)
+                .genero(genero)
+                .preco(preco)
+                .img(img)
                 .build();
         return produtoRepository.save(produto);
     }
