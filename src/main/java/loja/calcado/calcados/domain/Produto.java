@@ -24,5 +24,6 @@ public class Produto {
     private String marca;
     private String genero;
     private String img;
+    private byte[] img_byte;
     private double preco;
 }

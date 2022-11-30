@@ -15,6 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,7 +48,18 @@ public class ProdutoController {
         List<Produto> produtos =  StreamSupport.stream(p1.spliterator(), false).map(produto ->{
             Produto prod = new Produto();
             BeanUtils.copyProperties(produto, prod);
-            prod.setImg("opa.png");
+
+            BufferedImage bImage = null;
+            try {
+                bImage = ImageIO.read(new File("src/public/img/" + produto.getImg()));
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ImageIO.write(bImage, "png", bos );
+                byte[] data = bos.toByteArray();
+                prod.setImg_byte(data);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             return prod;
         }).collect(Collectors.toList());
 
@@ -53,7 +69,21 @@ public class ProdutoController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Produto> findById(@PathVariable long id){
-        return ResponseEntity.ok(produtoService.findByIdOrThrowBadRequestException(id));
+
+        Produto p1 = produtoService.findByIdOrThrowBadRequestException(id);
+
+        BufferedImage bImage = null;
+        try {
+            bImage = ImageIO.read(new File("src/public/img/" + p1.getImg()));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "png", bos );
+            byte[] data = bos.toByteArray();
+            p1.setImg_byte(data);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.ok(p1);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {"multipart/form-data"})
